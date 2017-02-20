@@ -1,9 +1,9 @@
 package com.lany.greendao;
 
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Property;
+import org.greenrobot.greendao.annotation.Generated;
 
 @Entity
 public class User {
@@ -25,6 +25,16 @@ public class User {
 
     @Generated(hash = 586692638)
     public User() {
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "age=" + age +
+                ", id=" + id +
+                ", username='" + username + '\'' +
+                ", nickname='" + nickname + '\'' +
+                '}';
     }
 
     public Long getId() {

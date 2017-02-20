@@ -11,29 +11,58 @@
         android:orientation="horizontal"
         android:padding="8dp">
 
-        <Button
-            android:id="@+id/button"
+        <TextView
+            android:id="@+id/add_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="增" />
+            android:background="#dddddd"
+            android:padding="4dp"
+            android:text="add" />
 
-        <Button
-            android:id="@+id/button2"
+        <TextView
+            android:id="@+id/delete_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="删" />
+            android:layout_marginLeft="4dp"
+            android:background="#dddddd"
+            android:padding="4dp"
+            android:text="delete" />
 
-        <Button
-            android:id="@+id/button3"
+        <TextView
+            android:id="@+id/query_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="查" />
+            android:layout_marginLeft="4dp"
+            android:background="#dddddd"
+            android:padding="4dp"
+            android:text="query" />
 
-        <Button
-            android:id="@+id/button4"
+        <TextView
+            android:id="@+id/update_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="改" />
+            android:layout_marginLeft="4dp"
+            android:background="#dddddd"
+            android:padding="4dp"
+            android:text="update" />
+
+        <TextView
+            android:id="@+id/delete_all_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:background="#dddddd"
+            android:padding="4dp"
+            android:text="delete all" />
+
+        <TextView
+            android:id="@+id/clear_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:background="#dddddd"
+            android:padding="4dp"
+            android:text="clear" />
     </LinearLayout>
 
     <EditText

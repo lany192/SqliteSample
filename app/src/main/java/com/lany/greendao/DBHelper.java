@@ -36,7 +36,7 @@ public class DBHelper {
      */
     public void insertUser(User user) {
         UserDao userDao = daoSession.getUserDao();
-        userDao.insert(user);
+        userDao.insertOrReplace(user);
     }
 
     /**
@@ -59,6 +59,15 @@ public class DBHelper {
     }
 
     /**
+     * 删除所有记录
+     */
+    public void deleteAllUser() {
+        UserDao userDao = daoSession.getUserDao();
+        userDao.deleteAll();
+    }
+
+
+    /**
      * 更新一条记录
      */
     public void updateUser(User user) {
@@ -79,10 +88,21 @@ public class DBHelper {
     /**
      * 查询用户列表
      */
-    public List<User> queryUserList(int age) {
+    public List<User> queryUserListByAge(int age) {
         UserDao userDao = daoSession.getUserDao();
         QueryBuilder<User> qb = userDao.queryBuilder();
-        qb.where(UserDao.Properties.Age.gt(age)).orderAsc(UserDao.Properties.Age);
+        qb.where(UserDao.Properties.Age.eq(age)).orderAsc(UserDao.Properties.Age);
+        List<User> list = qb.list();
+        return list;
+    }
+
+    /**
+     * 查询年龄为2或者id为3的用户
+     */
+    public List<User> queryUserListByAge(int age, String username) {
+        UserDao userDao = daoSession.getUserDao();
+        QueryBuilder<User> qb = userDao.queryBuilder();
+        qb.whereOr(UserDao.Properties.Age.eq(age), UserDao.Properties.Username.eq(username));
         List<User> list = qb.list();
         return list;
     }
