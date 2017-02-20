@@ -1,9 +1,9 @@
 package com.lany.greendao;
 
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Property;
-import org.greenrobot.greendao.annotation.Generated;
 
 @Entity
 public class User {
@@ -13,7 +13,6 @@ public class User {
     private String username;
     @Property(nameInDb = "nick_name")
     private String nickname;
-
     private int age;
 
     @Generated(hash = 1453834046)
@@ -58,15 +57,5 @@ public class User {
 
     public void setAge(int age) {
         this.age = age;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", nickname='" + nickname + '\'' +
-                ", age=" + age +
-                '}';
     }
 }
