@@ -1,76 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/activity_main"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:ignore="RtlHardcoded">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/buttonAdd"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="8dp">
-
-        <TextView
-            android:id="@+id/add_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#dddddd"
-            android:padding="4dp"
-            android:text="add" />
-
-        <TextView
-            android:id="@+id/delete_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:background="#dddddd"
-            android:padding="4dp"
-            android:text="delete" />
-
-        <TextView
-            android:id="@+id/query_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:background="#dddddd"
-            android:padding="4dp"
-            android:text="query" />
-
-        <TextView
-            android:id="@+id/update_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:background="#dddddd"
-            android:padding="4dp"
-            android:text="update" />
-
-        <TextView
-            android:id="@+id/delete_all_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:background="#dddddd"
-            android:padding="4dp"
-            android:text="delete all" />
-
-        <TextView
-            android:id="@+id/clear_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:background="#dddddd"
-            android:padding="4dp"
-            android:text="clear" />
-    </LinearLayout>
+        android:layout_alignParentRight="true"
+        android:onClick="onAddButtonClick"
+        android:text="@string/add" />
 
     <EditText
-        android:id="@+id/show_text"
+        android:id="@+id/editTextNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/buttonAdd"
+        android:hint="@string/enter_new_note"
+        android:imeOptions="actionDone"
+        android:inputType="text" />
+
+    <TextView
+        android:id="@+id/textViewNoteInstructions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextNote"
+        android:gravity="center_horizontal"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingBottom="8dp"
+        android:text="@string/click_to_remove"
+        android:textSize="12sp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewNotes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/black"
-        android:gravity="top|left"
-        android:textColor="@android:color/white"
-        android:textSize="10sp" />
-</LinearLayout>
+        android:layout_below="@id/textViewNoteInstructions"
+        android:scrollbars="vertical" />
+
+</RelativeLayout>

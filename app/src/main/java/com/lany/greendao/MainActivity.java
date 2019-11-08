@@ -2,131 +2,104 @@ package com.lany.greendao;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.EditText;
 
+import org.greenrobot.greendao.rx.RxDao;
+import org.greenrobot.greendao.rx.RxQuery;
+
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
 
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+
 public class MainActivity extends AppCompatActivity {
-    private TextView mShowText;
+    private EditText editText;
+    private RxDao<Note, Long> noteDao;
+    private RxQuery<Note> notesQuery;
+    private NotesAdapter notesAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mShowText = (TextView) findViewById(R.id.show_text);
-        findViewById(R.id.add_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mShowText.setText("");
-                List<User> oldItems = DBHelper.getInstance().queryUserList();
-                for (User user : oldItems) {
-                    showPrintln("" + user);
-                }
-                int size = oldItems.size();
-                showPrintln("新增之前数据量:" + size);
+        setUpViews();
+        DaoSession daoSession = ((MyApp) getApplication()).getDaoSession();
+        noteDao = daoSession.getNoteDao().rx();
+        notesQuery = daoSession.getNoteDao().queryBuilder().orderAsc(NoteDao.Properties.Text).rx();
+        updateNotes();
+    }
 
-                int j = size + 1;
-                User user = new User();
-                user.setId(Long.valueOf(size + 1));
-                user.setAge(j);
-                user.setUsername("第" + j + "人");
-                user.setNickname("item name" + j);
-                showPrintln("插入的数据:" + user);
-                DBHelper.getInstance().insertUser(user);
+    private void updateNotes() {
+        notesQuery.list()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<Note>>() {
 
-                List<User> newItems = DBHelper.getInstance().queryUserList();
-                showPrintln("新增之后数据量:" + newItems.size());
-                for (User item : newItems) {
-                    showPrintln("" + item);
-                }
-            }
-        });
-        findViewById(R.id.delete_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mShowText.setText("");
-                List<User> oldItems = DBHelper.getInstance().queryUserList();
-                if (oldItems.size() < 1) {
-                    showPrintln("---------没有数据，不能删除-----------");
-                    return;
-                }
-                for (User user : oldItems) {
-                    showPrintln("" + user);
-                }
-                int size = oldItems.size();
-                showPrintln("删除之前数据量:" + size);
-                showPrintln("删除第一个数据");
-                DBHelper.getInstance().deleteUser(oldItems.get(0));
-                List<User> newItems = DBHelper.getInstance().queryUserList();
-                showPrintln("删除之后数据:" + newItems.size());
-                for (User item : newItems) {
-                    showPrintln("" + item);
-                }
-            }
-        });
-        findViewById(R.id.query_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mShowText.setText("");
-                showPrintln("查询年龄为2或者username为“第3人”的用户");
-                List<User> newItems = DBHelper.getInstance().queryUserListByAge(2, "第3人");
-                if (newItems.size() > 0) {
-                    for (User item : newItems) {
-                        showPrintln("" + item);
+                    @Override
+                    public void call(List<Note> notes) {
+                        notesAdapter.setNotes(notes);
                     }
-                } else {
-                    showPrintln("找不到相关数据");
-                }
-            }
-        });
-        findViewById(R.id.delete_all_btn).setOnClickListener(new View.OnClickListener() {
+                });
+    }
+
+    protected void setUpViews() {
+        RecyclerView recyclerView = findViewById(R.id.recyclerViewNotes);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        notesAdapter = new NotesAdapter(noteClickListener);
+        recyclerView.setAdapter(notesAdapter);
+        editText = findViewById(R.id.editTextNote);
+        findViewById(R.id.buttonAdd).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mShowText.setText("");
-                List<User> oldItems = DBHelper.getInstance().queryUserList();
-                for (User user : oldItems) {
-                    showPrintln("" + user);
-                }
-                int size = oldItems.size();
-                showPrintln("之前数据量:" + size);
-                showPrintln("删除所有数据");
-                DBHelper.getInstance().deleteAllUser();
-                List<User> newItems = DBHelper.getInstance().queryUserList();
-                showPrintln("删除所有数据之后数据量:" + newItems.size());
-            }
-        });
-        findViewById(R.id.update_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mShowText.setText("");
-                showPrintln("所有用户的年龄后修改成1");
-                showPrintln("修改之前--------------");
-                List<User> oldItems = DBHelper.getInstance().queryUserList();
-                for (User user : oldItems) {
-                    showPrintln("" + user);
-                }
-                for (User user : oldItems) {
-                    user.setAge(1);
-                    DBHelper.getInstance().updateUser(user);
-                }
-                showPrintln("修改之后--------------");
-                List<User> newItems = DBHelper.getInstance().queryUserList();
-                for (User item : newItems) {
-                    showPrintln("" + item);
-                }
-            }
-        });
-        findViewById(R.id.clear_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mShowText.setText("");
+                addNote();
             }
         });
     }
 
-    private void showPrintln(String str) {
-        String old = mShowText.getText().toString();
-        mShowText.setText(old + "\n" + str);
+    public void onAddButtonClick(View view) {
+        addNote();
     }
+
+    private void addNote() {
+        String noteText = editText.getText().toString();
+        editText.setText("");
+
+        final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
+        String comment = "Added on " + df.format(new Date());
+
+        Note note = new Note(null, noteText, comment, new Date(), NoteType.TEXT);
+        noteDao.insert(note)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Note>() {
+                    @Override
+                    public void call(Note note) {
+                        Log.d("DaoExample", "Inserted new note, ID: " + note.getId());
+                        updateNotes();
+                    }
+                });
+    }
+
+    NotesAdapter.NoteClickListener noteClickListener = new NotesAdapter.NoteClickListener() {
+        @Override
+        public void onNoteClick(int position) {
+            Note note = notesAdapter.getNote(position);
+            final Long noteId = note.getId();
+
+            noteDao.deleteByKey(noteId)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Void>() {
+                        @Override
+                        public void call(Void aVoid) {
+                            Log.d("DaoExample", "Deleted note, ID: " + noteId);
+                            updateNotes();
+                        }
+                    });
+        }
+    };
 }
