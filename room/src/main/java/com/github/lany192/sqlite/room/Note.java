@@ -1,4 +1,4 @@
-package com.lany.greendao;
+package com.github.lany192.sqlite.room;
 
 import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.annotation.Entity;
@@ -7,9 +7,10 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.NotNull;
 
+import java.util.Date;
+
 import lombok.Getter;
 import lombok.Setter;
-import java.util.Date;
 
 @Setter
 @Getter
@@ -22,7 +23,7 @@ public class Note {
     @NotNull
     private String text;
     private String comment;
-    private java.util.Date date;
+    private Date date;
 
     @Convert(converter = NoteTypeConverter.class, columnType = String.class)
     private NoteType type;
@@ -36,7 +37,7 @@ public class Note {
     }
 
     @Generated(hash = 1686394253)
-    public Note(Long id, @NotNull String text, String comment, java.util.Date date, NoteType type) {
+    public Note(Long id, @NotNull String text, String comment, Date date, NoteType type) {
         this.id = id;
         this.text = text;
         this.comment = comment;
@@ -68,11 +69,11 @@ public class Note {
         this.comment = comment;
     }
 
-    public java.util.Date getDate() {
+    public Date getDate() {
         return this.date;
     }
 
-    public void setDate(java.util.Date date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

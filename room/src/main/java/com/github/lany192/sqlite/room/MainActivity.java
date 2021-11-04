@@ -1,4 +1,4 @@
-package com.lany.greendao;
+package com.github.lany192.sqlite.room;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +8,10 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.lany.greendao.DaoSession;
+import com.lany.greendao.NoteDao;
+import com.lany.greendao.R;
 
 import org.greenrobot.greendao.rx.RxDao;
 import org.greenrobot.greendao.rx.RxQuery;

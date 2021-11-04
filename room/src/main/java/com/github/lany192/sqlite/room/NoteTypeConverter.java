@@ -1,4 +1,4 @@
-package com.lany.greendao;
+package com.github.lany192.sqlite.room;
 
 import org.greenrobot.greendao.converter.PropertyConverter;
 

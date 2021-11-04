@@ -1,4 +1,4 @@
-package com.lany.greendao;
+package com.github.lany192.sqlite.greendao;
 
 import org.junit.Test;
 

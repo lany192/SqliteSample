@@ -1,7 +1,10 @@
-package com.lany.greendao;
+package com.github.lany192.sqlite.greendao;
 
 import android.app.Application;
 import android.content.Context;
+
+import com.lany.greendao.DaoMaster;
+import com.lany.greendao.DaoSession;
 
 import org.greenrobot.greendao.database.Database;
 

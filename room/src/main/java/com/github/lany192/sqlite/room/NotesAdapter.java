@@ -1,7 +1,8 @@
-package com.lany.greendao;
+package com.github.lany192.sqlite.room;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
+import com.lany.greendao.R;
 
 import java.util.List;
 
@@ -26,6 +27,6 @@ public class NotesAdapter extends BaseQuickAdapter<Note, BaseViewHolder> {
 
     public interface NoteClickListener {
 
-        void onNoteClick(int position,Note note);
+        void onNoteClick(int position, Note note);
     }
 }
