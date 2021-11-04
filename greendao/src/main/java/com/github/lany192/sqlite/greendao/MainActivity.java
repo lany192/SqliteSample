@@ -9,9 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.lany192.sqlite.greendao.DaoSession;
-import com.github.lany192.sqlite.greendao.NoteDao;
-
 import org.greenrobot.greendao.rx.RxDao;
 import org.greenrobot.greendao.rx.RxQuery;
 
@@ -24,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText editText;
     private RxDao<Note, Long> noteDao;
     private RxQuery<Note> notesQuery;
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,18 +38,17 @@ public class MainActivity extends AppCompatActivity {
         notesQuery.list()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(notes -> recyclerView.setAdapter(new NotesAdapter(notes, (position, note) -> {
-                    final Long noteId = note.getId();
-                    noteDao.deleteByKey(noteId)
+                    noteDao.deleteByKey(note.getId())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(aVoid -> {
-                                Log.d("DaoExample", "Deleted note, ID: " + noteId);
+                                Log.d("DaoExample", "Deleted note, ID: " + note.getId());
                                 updateNotes();
                             });
                 })));
     }
 
     protected void setUpViews() {
-        RecyclerView recyclerView = findViewById(R.id.recyclerViewNotes);
+        recyclerView = findViewById(R.id.recyclerViewNotes);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         editText = findViewById(R.id.editTextNote);
@@ -70,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
         String comment = "Added on " + df.format(new Date());
 
-        Note note = new Note(null, noteText, comment, new Date(), NoteType.TEXT);
+        Note note = new Note(null, noteText, comment, new Date());
         noteDao.insert(note)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(note1 -> {
