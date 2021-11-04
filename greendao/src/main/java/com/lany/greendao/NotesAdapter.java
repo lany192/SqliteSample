@@ -1,72 +1,31 @@
 package com.lany.greendao;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
-    private NoteClickListener clickListener;
-    private List<Note> dataset;
+public class NotesAdapter extends BaseQuickAdapter<Note, BaseViewHolder> {
+    private final NoteClickListener clickListener;
+
+    public NotesAdapter(List<Note> data, NoteClickListener clickListener) {
+        super(R.layout.item_note, data);
+        this.clickListener = clickListener;
+    }
+
+    @Override
+    protected void convert(BaseViewHolder holder, Note note) {
+        holder.setText(R.id.textViewNoteText, note.getText());
+        holder.setText(R.id.textViewNoteComment, note.getComment());
+        holder.itemView.setOnClickListener(v -> {
+            if (clickListener != null) {
+                clickListener.onNoteClick(holder.getBindingAdapterPosition(),note);
+            }
+        });
+    }
 
     public interface NoteClickListener {
 
-        void onNoteClick(int position);
-    }
-
-    class NoteViewHolder extends RecyclerView.ViewHolder {
-        public TextView text;
-        public TextView comment;
-
-        public NoteViewHolder(View itemView, final NoteClickListener clickListener) {
-            super(itemView);
-            text = itemView.findViewById(R.id.textViewNoteText);
-            comment = itemView.findViewById(R.id.textViewNoteComment);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (clickListener != null) {
-                        clickListener.onNoteClick(getAdapterPosition());
-                    }
-                }
-            });
-        }
-    }
-
-    public NotesAdapter(NoteClickListener clickListener) {
-        this.clickListener = clickListener;
-        this.dataset = new ArrayList<>();
-    }
-
-    public void setNotes(@NonNull List<Note> notes) {
-        dataset = notes;
-        notifyDataSetChanged();
-    }
-
-    public Note getNote(int position) {
-        return dataset.get(position);
-    }
-
-    @Override
-    public NoteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_note, parent, false);
-        return new NoteViewHolder(view, clickListener);
-    }
-
-    @Override
-    public void onBindViewHolder(NoteViewHolder holder, int position) {
-        Note note = dataset.get(position);
-        holder.text.setText(note.getText());
-        holder.comment.setText(note.getComment());
-    }
-
-    @Override
-    public int getItemCount() {
-        return dataset.size();
+        void onNoteClick(int position,Note note);
     }
 }
