@@ -1,4 +1,4 @@
-package com.lany.greendao;
+package com.github.lany192.sqlite.greendao;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.lany.greendao", appContext.getPackageName());
+        assertEquals("com.github.lany192.sqlite.greendao", appContext.getPackageName());
     }
 }

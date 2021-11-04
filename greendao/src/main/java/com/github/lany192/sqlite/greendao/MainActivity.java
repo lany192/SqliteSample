@@ -9,9 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.lany.greendao.DaoSession;
-import com.lany.greendao.NoteDao;
-import com.lany.greendao.R;
+import com.github.lany192.sqlite.greendao.DaoSession;
+import com.github.lany192.sqlite.greendao.NoteDao;
 
 import org.greenrobot.greendao.rx.RxDao;
 import org.greenrobot.greendao.rx.RxQuery;

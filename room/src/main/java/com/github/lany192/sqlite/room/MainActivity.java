@@ -8,37 +8,32 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.lany.greendao.DaoSession;
-import com.lany.greendao.NoteDao;
-import com.lany.greendao.R;
-
-import org.greenrobot.greendao.rx.RxDao;
-import org.greenrobot.greendao.rx.RxQuery;
+import androidx.room.Room;
 
 import java.text.DateFormat;
 import java.util.Date;
 
-import rx.android.schedulers.AndroidSchedulers;
-
 public class MainActivity extends AppCompatActivity {
     private EditText editText;
-    private RxDao<Note, Long> noteDao;
-    private RxQuery<Note> notesQuery;
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setUpViews();
-        DaoSession daoSession = ((MyApp) getApplication()).getDaoSession();
-        noteDao = daoSession.getNoteDao().rx();
-        notesQuery = daoSession.getNoteDao().queryBuilder().orderAsc(NoteDao.Properties.Text).rx();
+        recyclerView = findViewById(R.id.recyclerViewNotes);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        editText = findViewById(R.id.editTextNote);
+        findViewById(R.id.buttonAdd).setOnClickListener(v -> addNote());
         updateNotes();
     }
 
     private void updateNotes() {
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "database-name").build();
+        db.userDao().getAll()
+
         notesQuery.list()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(notes -> recyclerView.setAdapter(new NotesAdapter(notes, (position, note) -> {
@@ -52,14 +47,6 @@ public class MainActivity extends AppCompatActivity {
                 })));
     }
 
-    protected void setUpViews() {
-        RecyclerView recyclerView = findViewById(R.id.recyclerViewNotes);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        editText = findViewById(R.id.editTextNote);
-        findViewById(R.id.buttonAdd).setOnClickListener(v -> addNote());
-    }
-
     public void onAddButtonClick(View view) {
         addNote();
     }
@@ -71,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
         String comment = "Added on " + df.format(new Date());
 
-        Note note = new Note(null, noteText, comment, new Date(), NoteType.TEXT);
+        User note = new User(null, noteText, comment, new Date(), NoteType.TEXT);
         noteDao.insert(note)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(note1 -> {

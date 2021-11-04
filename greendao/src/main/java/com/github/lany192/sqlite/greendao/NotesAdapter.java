@@ -2,7 +2,6 @@ package com.github.lany192.sqlite.greendao;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.lany.greendao.R;
 
 import java.util.List;
 

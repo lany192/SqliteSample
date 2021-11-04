@@ -9,14 +9,7 @@ import org.greenrobot.greendao.annotation.NotNull;
 
 import java.util.Date;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Setter
-@Getter
-@Entity(indexes = {
-    @Index(value = "text, date DESC", unique = true)
-})
+@Entity(indexes = {@Index(value = "text, date DESC", unique = true)})
 public class Note {
     @Id
     private Long id;
@@ -28,16 +21,9 @@ public class Note {
     @Convert(converter = NoteTypeConverter.class, columnType = String.class)
     private NoteType type;
 
-    @Generated(hash = 1272611929)
-    public Note() {
-    }
-
-    public Note(Long id) {
-        this.id = id;
-    }
-
-    @Generated(hash = 1686394253)
-    public Note(Long id, @NotNull String text, String comment, Date date, NoteType type) {
+    @Generated(hash = 59778150)
+    public Note(Long id, @NotNull String text, String comment, Date date,
+            NoteType type) {
         this.id = id;
         this.text = text;
         this.comment = comment;
@@ -45,8 +31,12 @@ public class Note {
         this.type = type;
     }
 
+    @Generated(hash = 1272611929)
+    public Note() {
+    }
+
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Long id) {
@@ -54,7 +44,7 @@ public class Note {
     }
 
     public String getText() {
-        return this.text;
+        return text;
     }
 
     public void setText(String text) {
@@ -62,7 +52,7 @@ public class Note {
     }
 
     public String getComment() {
-        return this.comment;
+        return comment;
     }
 
     public void setComment(String comment) {
@@ -70,18 +60,18 @@ public class Note {
     }
 
     public Date getDate() {
-        return this.date;
+        return date;
     }
 
     public void setDate(Date date) {
         this.date = date;
     }
 
-    public NoteType getType() {
-        return this.type;
+    public com.github.lany192.sqlite.greendao.NoteType getType() {
+        return type;
     }
 
-    public void setType(NoteType type) {
+    public void setType(com.github.lany192.sqlite.greendao.NoteType type) {
         this.type = type;
     }
 }

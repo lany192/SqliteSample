@@ -3,8 +3,8 @@ package com.github.lany192.sqlite.greendao;
 import android.app.Application;
 import android.content.Context;
 
-import com.lany.greendao.DaoMaster;
-import com.lany.greendao.DaoSession;
+import com.github.lany192.sqlite.greendao.DaoMaster;
+import com.github.lany192.sqlite.greendao.DaoSession;
 
 import org.greenrobot.greendao.database.Database;
 
