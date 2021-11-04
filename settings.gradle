@@ -1,2 +1,2 @@
 include ':greendao'
-//include ':room'
+include ':room'

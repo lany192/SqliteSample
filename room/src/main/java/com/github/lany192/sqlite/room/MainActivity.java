@@ -12,6 +12,8 @@ import androidx.room.Room;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private EditText editText;
@@ -30,21 +32,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateNotes() {
-        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "database-name").build();
-        db.userDao().getAll()
-
-        notesQuery.list()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(notes -> recyclerView.setAdapter(new NotesAdapter(notes, (position, note) -> {
-                    final Long noteId = note.getId();
-                    noteDao.deleteByKey(noteId)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(aVoid -> {
-                                Log.d("DaoExample", "Deleted note, ID: " + noteId);
-                                updateNotes();
-                            });
-                })));
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "database-name").build();
+        List<User> items = db.userDao().getAll();
+        recyclerView.setAdapter(new UserAdapter(items, (position, note) -> {
+            db.userDao().delete(note);
+            Log.d("DaoExample", "Deleted note, ID: " + note.getUid());
+            updateNotes();
+        }));
     }
 
     public void onAddButtonClick(View view) {
@@ -58,12 +52,10 @@ public class MainActivity extends AppCompatActivity {
         final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
         String comment = "Added on " + df.format(new Date());
 
-        User note = new User(null, noteText, comment, new Date(), NoteType.TEXT);
-        noteDao.insert(note)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(note1 -> {
-                    Log.d("DaoExample", "Inserted new note, ID: " + note1.getId());
-                    updateNotes();
-                });
+        User note = new User(new Random().nextInt(), noteText, comment);
+
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "database-name").build();
+        db.userDao().insertAll(note);
+        updateNotes();
     }
 }
